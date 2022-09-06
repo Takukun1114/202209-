@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>勤怠管理システム</title>
+    <style type="text/css">
+        .tb1 th,
+        .tb1 td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .tb1 td .update-btn {
+            margin-right: 15px;
+        }
+
+        select {
+            margin: auto;
+            padding: auto;
+            border: 2px solid gray;
+            height: 25px;
+        }
+
+        #working-time {
+            margin: auto;
+            padding: 0;
+        }
+
+        .search {
+            margin-left: 300px;
+            float: left;
+        }
+
+        .control-btns {
+            float: left;
+            margin-left: 350px;
+        }
+
+        .control-btns .new-btn {
+            margin-right: 50px;
+        }
+
+        .cleanfloat {
+            clear: both;
+        }
+    </style>
+    <script></script>
+</head>
+
+<body>
+    <header>
+        <h1>勤怠情報詳細</h1>
+        <nav></nav>
+    </header>
+    <div>
+        <p><span>社員ID： 1</span> </p>
+        <p><span>氏名： OOOO</span></p>
+        <p><span>所属部門：　OOOO</span></p>
+        <div>
+            <p class="search"><input type="date" id="working-time" name="working-time" value=""> <span><select
+                        id="select-box" name="status">
+                        <option value="normal">正常</option>
+                        <option value="rest">有給休暇</option>
+                        <option value="others">など</option>
+                    </select></span> <input type="button" value="検索"></p>
+            <p class="control-btns"><input class="new-btn" type="button" value="新規作成" onclick="javascript:;"> <input
+                    type="button" value="戻る" onclick="javascript:;"> </p>
+        </div>
+
+        <p class="cleanfloat"> </p>
+        <table class="tb1">
+            <thead>
+                <tr>
+                    <th>記録番号</th>
+                    <th>日付</th>
+                    <th>作業開始時間</th>
+                    <th>作業開始時間</th>
+                    <th>休憩時間</th>
+                    <th>残業時間</th>
+                    <th>実際勤務時間</th>
+                    <th>状態</th>
+                    <th>作業内容</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2022090101</td>
+                    <td>2022.9.1</td>
+                    <td>09:00:00</td>
+                    <td>19:00 </td>
+                    <td>1.0 </td>
+                    <td>1.0 </td>
+                    <td>9.0 </td>
+                    <td>正常 </td>
+                    <td>OOOOホームページ制作 </td>
+                    <td><input class="update-btn" type="button" value="修正" onclick="javascript:;"> <input type="button"
+                            value="削除" onclick="javascript:;"></td>
+                </tr>
+                <tr>
+                    <td>2022090201</td>
+                    <td>2022.9.2</td>
+                    <td>09:00:00</td>
+                    <td>18:00 </td>
+                    <td>1.0</td>
+                    <td>0.0 </td>
+                    <td>8.0 </td>
+                    <td>正常 </td>
+                    <td>OOOOホームページ更新</td>
+                    <td><input class="update-btn" type="button" value="修正" onclick="javascript:;"> <input type="button"
+                            value="削除" onclick="javascript:;"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <footer><br><br>
+        <div> &copy; OOOO株式会社 2022<br>All rights reserved.</div>
+    </footer>
+</body>
+
+</html>
