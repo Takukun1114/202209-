@@ -5,9 +5,9 @@ CREATE TABLE IF NOT EXISTS `t_employee` (
 `password` VARCHAR(8) NOT NULL COMMENT 'パスワード',
 `dept_id` VARCHAR(10) COMMENT '所属部門ID',
 `del_flg` INT(1) DEFAULT '0' COMMENT '削除フラグ',
-`create_date` DATE COMMENT '作成日時',
+`create_date` DATETIME COMMENT '作成日時',
 `create_user_id` INT(5) COMMENT '作成者id',
-`update_date` DATE COMMENT '更新日時',
+`update_date` DATETIME COMMENT '更新日時',
 `update_user_id` INT(5) COMMENT '更新者id',
 `employee_email` VARCHAR(50) DEFAULT NULL COMMENT '社員メールアドレス',
 PRIMARY KEY (`employee_id`) USING BTREE
@@ -27,9 +27,9 @@ CREATE TABLE IF NOT EXISTS `t_attendance` (
 `absence_hours` DECIMAL(3,1) COMMENT '欠勤時間',
 `working_status_id` INT COMMENT '状態ID',
 `working_details` VARCHAR(200) COMMENT '作業内容',
-`create_date` DATE COMMENT '作成日時',
+`create_date` DATETIME COMMENT '作成日時',
 `create_user_id` INT COMMENT '作成者id',
-`update_date` DATE COMMENT '更新日時',
+`update_date` DATETIME COMMENT '更新日時',
 `update_user_id` INT COMMENT '更新者id',
 `flow_status_id` INT(1) COMMENT 'フロー状態ID',
 `rec_del_flg` INT(1) COMMENT '削除フラグ',
@@ -42,9 +42,9 @@ CREATE TABLE IF NOT EXISTS `m_dept` (
 `dept_id` VARCHAR(10) NOT NULL COMMENT '部門ID',
 `dept_name` VARCHAR(100) COMMENT '部門名称',
 `del_flg` INT(1) COMMENT '削除フラグ',
-`create_date` DATE COMMENT '作成日時',
+`create_date` DATETIME COMMENT '作成日時',
 `create_user_id` INT COMMENT '作成者id',
-`update_date` DATE COMMENT '更新日時',
+`update_date` DATETIME COMMENT '更新日時',
 `update_user_id` INT COMMENT '更新者id',
 PRIMARY KEY (`dept_id`)
 );
@@ -55,9 +55,9 @@ CREATE TABLE IF NOT EXISTS `m_calendar` (
 `weekday` VARCHAR(2) COMMENT '曜日',
 `holiday_flg` INT(1) COMMENT '休日フラグ',
 `del_flg` INT(1) COMMENT '削除フラグ',
-`create_date` DATE COMMENT '作成日時',
+`create_date` DATETIME COMMENT '作成日時',
 `create_user_id` INT COMMENT '作成者id',
-`update_date` DATE COMMENT '更新日時',
+`update_date` DATETIME COMMENT '更新日時',
 `update_user_id` INT COMMENT '更新者id',
 PRIMARY KEY (`calendar_date`)
 );
