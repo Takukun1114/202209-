@@ -73,3 +73,17 @@ CREATE TABLE IF NOT EXISTS `m_status` (
 `update_user_id` INT COMMENT '更新者id',
 PRIMARY KEY (`flow_status_id`)
 );
+
+DROP TABLE IF EXISTS `m_attendance_ym`;
+CREATE TABLE IF NOT EXISTS `m_attendance_ym` (
+`attendance_ym` VARCHAR(7) NOT NULL COMMENT '勤怠年月',
+`display_flg` INT(1) COMMENT '表示フラグ',
+`del_flg` INT(1) DEFAULT '0' COMMENT '削除フラグ',
+`create_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '作成日時',
+`create_user_id` INT COMMENT '作成者id',
+`update_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '更新日時',
+`update_user_id` INT COMMENT '更新者id',
+PRIMARY KEY (`attendance_ym`)
+);
+
+
