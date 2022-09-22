@@ -10,12 +10,28 @@ html, body {
     margin-right: 5px;
 }
 
+.mr-10{
+    margin-right: 10px;
+}
+
 .ml-5 {
     margin-left: 5px;
 }
 
+.ml-10 {
+    margin-left: 10px;
+}
+
 .mb-5 {
     margin-bottom: 5px;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
 }
 
 .mt-5 {
@@ -23,6 +39,10 @@ html, body {
 }
 .mt-10 {
     margin-top: 10px;
+}
+
+.mt-20 {
+    margin-top: 20px;
 }
 
 .floatLeft {

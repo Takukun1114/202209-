@@ -1,6 +1,7 @@
 package com.northsea.peoplemanagement.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -30,5 +31,6 @@ public class Attendance {
     private Date update_date;
     private int update_user_id;
     private int flow_status_id;
+    @TableLogic
     private int rec_del_flg;
 }

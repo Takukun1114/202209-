@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.northsea.peoplemanagement.domain.Attendance;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author BenSitu
@@ -23,7 +24,14 @@ public interface AttendanceService extends IService<Attendance> {
 
     Attendance getById(String id);
 
+    Attendance getByRecordId(String id);
+
+    List<Attendance> getAllNotDel(Integer rec_del_flg);
+
     IPage<Attendance> getPage(int currentPage, int pageSize);
 
     IPage<Attendance> getPage(int currentPage, int pageSize, Attendance attendance);
+
+    IPage<Attendance> getAllBySearch(int currentPage, int pageSize, String attendance_date);
+
 }

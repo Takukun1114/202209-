@@ -1,12 +1,15 @@
 package com.northsea.peoplemanagement.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.northsea.peoplemanagement.domain.Attendance;
 import org.apache.logging.log4j.util.Strings;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 /**
  * @Author BenSitu
@@ -46,9 +49,43 @@ public class AttendanceServiceTest {
 
 
     @Test
-    void getWorkingDetails(String record_id){
+    void getWorkingDetails(){
         LambdaQueryWrapper<Attendance> lambdaQueryWrapper = new LambdaQueryWrapper<Attendance>();
-        lambdaQueryWrapper.like(Strings.isNotEmpty(record_id), Attendance::getRecord_id, "100012022091401");
+        lambdaQueryWrapper.like(Attendance::getRecord_id, "100012022091401");
         attendanceService.getOne(lambdaQueryWrapper);
+    }
+
+    @Test
+    void getByDateTest(){
+        LambdaQueryWrapper<Attendance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Attendance::getAttendance_date, "2022-09-14");
+        List<Attendance> attendances = attendanceService.list();
+    }
+
+    @Test
+    void getByRecordIdTest(){
+        LambdaQueryWrapper<Attendance> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Attendance::getRecord_id, "100012022091403");
+        attendanceService.getOne(lambdaQueryWrapper);
+    }
+
+    @Test
+    void getPagesTest(){
+        IPage<Attendance> page = attendanceService.getPage(1,10);
+        System.out.println(page.getCurrent());
+        System.out.println(page.getPages());
+        System.out.println(page.getSize());
+        System.out.println(page.getRecords());
+    }
+
+    @Test
+    void getInfoBySearchTest(){
+        IPage<Attendance> page = attendanceService.getAllBySearch(1, 10, "2022-09-14");
+        System.out.println(page.getRecords());
+    }
+
+    @Test
+    void deleteRecordTest(){
+        attendanceService.deleteAttendance("100012022091403");
     }
 }

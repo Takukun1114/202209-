@@ -16,17 +16,29 @@
 
       <el-container>
         <el-header style="font-size: 12px">
-          <div style="text-align: right;">
-            <el-dropdown>
-              <i class="el-icon-setting" style="margin-right: 15px"></i>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>View</el-dropdown-item>
-                <el-dropdown-item>Add</el-dropdown-item>
-                <el-dropdown-item>Delete</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-            <span>Ben</span>
-          </div>
+          <el-descriptions style="margin-top: 6px" title="" :column="3" border>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-user"></i>
+                社員ID
+              </template>
+              <span>{{employee_info.employee_id}}</span>
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-edit-outline"></i>
+                氏名
+              </template>
+              <span>{{employee_info.employee_name}}</span>
+            </el-descriptions-item>
+            <el-descriptions-item>
+              <template slot="label">
+                <i class="el-icon-office-building"></i>
+                所属部門
+              </template>
+              <span>{{employee_info.department_name}}</span>
+            </el-descriptions-item>
+          </el-descriptions>
         </el-header>
 
         <el-main>
@@ -37,22 +49,27 @@
               <el-breadcrumb-item>登録</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
-          <div class="functionNav mt-10">
+          <div>
+
+          </div>
+          <div class="functionNav mt-20">
             <div class="searchBox floatLeft">
               <div class="block">
                 <el-date-picker
-                    v-model="search_date"
+                    v-model="pagination.search_date"
                     type="date"
+                    value-format="yyyy-MM-dd"
+                    @change=""
                     placeholder="日付を選択してください">
                 </el-date-picker>
-                <el-button class="ml-5" type="primary" icon="el-icon-search">検索</el-button>
+                <el-button class="ml-5" type="primary" icon="el-icon-search" @click="searchInfo()">検索</el-button>
               </div>
             </div>
             <div class="goBack floatRight">
-              <el-button class="ml-5" type="info">戻る</el-button>
+              <el-button class="ml-5" type="info" @click="handleBack()">戻る</el-button>
             </div>
             <div class="newRecord floatRight">
-              <el-button class="" type="success">新規作成<i class="el-icon-circle-plus-outline ml-5"></i></el-button>
+              <el-button class="" type="success" @click="handleCreate()">新規作成<i class="el-icon-circle-plus-outline ml-5"></i></el-button>
             </div>
             <div class="cleanBoth">
             </div>
@@ -89,12 +106,16 @@
               </template>
             </el-table-column>
           </el-table>
-          <div>
+          <div class="pagination-container">
             <div class="block mt-5">
               <el-pagination
+                  class="pagination"
+                  @current-change="handleCurrentChange"
+                  :current-page="pagination.currentPage"
+                  :page-size="pagination.pageSize"
                   small
-                  layout="prev, pager, next"
-                  :total="50">
+                  layout="total, prev, pager, next"
+                  :total="pagination.total">
               </el-pagination>
             </div>
           </div>
@@ -106,17 +127,16 @@
 <script>
 // @ is an alias to /src
 
-import request from "@/utils/request";
-import Vue from "vue";
-var axios = require('axios')
-// 全局注册
-Vue.prototype.$axios = axios
-
 export default {
   name: 'DetailsView',
 
   data(){
     return {
+      employee_info:{
+        employee_id: '',
+        employee_name: '',
+        department_name: '',
+      },
       search_date: '',
       dataList:[],
       record_id: '',
@@ -132,27 +152,88 @@ export default {
         disabledDate(time) {
           return time.getTime() > Date.now();
         },
+      },
+      pagination:{
+        currentPage: 1,
+        pageSize: 10,
+        total: 0,
+        search_date : ''
       }
     }
   },
   created() {
+    this.getEmployeeInfo(10002);
     this.getAll();
   },
   methods: {
-    load(){
-      request.get("http://localhost:8090/attendances").then(res=>{
-        console.log(res.data);
-      })
+    searchInfo(){
+      let param = "?attendance_date="+this.pagination.search_date;
+      if (this.pagination.search_date !== null) {
+        this.$axios.get("http://localhost:8090/attendances/search/"+this.pagination.currentPage+"/"+this.pagination.pageSize+param).then((res)=>{
+          this.pagination.pageSize = res.data.data.size;
+          this.pagination.currentPage = res.data.data.current;
+          this.pagination.total = res.data.data.total;
+          this.dataList = res.data.data.records;
+        }).catch(err => console.log(err));
+      } else {
+        this.getAll();
+      }
     },
     getAll(){
-      this.$axios.get("http://localhost:8090/attendances").then(res => this.dataList = res.data.data)
-          .catch(err => console.log(err));
+      this.$axios.get("http://localhost:8090/attendances/"+this.pagination.currentPage+"/"+this.pagination.pageSize).then((res)=>{
+        this.pagination.pageSize = res.data.data.size;
+        this.pagination.currentPage = res.data.data.current;
+        this.pagination.total = res.data.data.total;
+        this.dataList = res.data.data.records;
+      }).catch(err => console.log(err));
+    },
+    handleCurrentChange(currentPage){
+      this.pagination.currentPage = currentPage;
+      this.getAll();
     },
     handleEdit(index, row) {
       console.log(index, row);
+      this.$router.push({
+        name:'Updaterecord',
+        params: {
+          record_id: row.record_id
+        }
+      })
     },
     handleDelete(index, row) {
       console.log(index, row);
+      this.$confirm("削除は確認しましたか","メッセージ",{type:"info"}).then(()=>{
+        this.$axios.delete("http://localhost:8090/attendances/delete/"+row.record_id).then((res)=>{
+          if (res.data.flag){
+            this.$message.success("削除しました");
+          } else {
+            this.$message.error("削除できません");
+          }
+        }).finally(()=>{
+          this.getAll();
+        })
+      }).catch(()=>{
+        this.$message.error("キャンセルしました");
+      })
+
+    },
+    handleCreate(){
+      this.$router.push({
+        name: 'Addrecord'
+      })
+    },
+    handleBack(){
+      this.$router.push({
+        name: 'home'
+      })
+    },
+    getEmployeeInfo(employeeID){
+      this.$axios.get("http://localhost:8090/employees/"+employeeID).then((res)=>{
+        console.log(res.data);
+        this.employee_info.employee_id = res.data.data.employee_id;
+        this.employee_info.employee_name = res.data.data.employee_name;
+        this.employee_info.department_name = res.data.data.dept_name;
+      }).catch(err => console.log(err));
     }
   }
 }
@@ -169,7 +250,7 @@ export default {
   color: #333;
 }
 
-.searchBox {
+.searchBox, .goBack, .newRecord {
   margin:10px 0;
 }
 </style>

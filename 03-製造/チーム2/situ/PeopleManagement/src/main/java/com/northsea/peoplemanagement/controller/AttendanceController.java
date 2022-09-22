@@ -22,32 +22,51 @@ public class AttendanceController {
 
     @PostMapping
     public DataResult save(@RequestBody Attendance attendance){
-        return new DataResult(attendanceService.save(attendance));
+        return new DataResult(true,attendanceService.save(attendance));
     }
 
     @GetMapping
     public DataResult getAll(){
-        return new DataResult(true, attendanceService.list());
+        return new DataResult(true, attendanceService.getAll());
     }
 
     @PutMapping
     public DataResult update(@RequestBody Attendance attendance){
-        return new DataResult(attendanceService.updateAttendance(attendance));
+        return new DataResult(true, attendanceService.updateAttendance(attendance));
     }
 
-    @DeleteMapping("/{id}")
-    public DataResult delete(@PathVariable String id ){
-        return new DataResult(attendanceService.deleteAttendance(id));
+
+    @DeleteMapping("/delete/{record_id}")
+    public DataResult delete(@PathVariable String record_id ){
+        return new DataResult(true, attendanceService.deleteAttendance(record_id));
     }
 
-    @GetMapping("/{id}")
-    public DataResult getByRecordId(@PathVariable String id){
-        return new DataResult(true, attendanceService.getById(id));
+    @GetMapping("/details/{record_id}")
+    public DataResult getByRecordId(@PathVariable String record_id){
+        return new DataResult(true, attendanceService.getByRecordId(record_id));
     }
 
-    @GetMapping("{currentPage}/{pageSize}")
+    @GetMapping("/{currentPage}/{pageSize}")
     public DataResult getPage(@PathVariable int currentPage, @PathVariable int pageSize){
-        return new DataResult(true, attendanceService.getPage(currentPage,pageSize));
+        IPage<Attendance> page = attendanceService.getPage(currentPage, pageSize);
+        if (currentPage > page.getPages()){
+            page = attendanceService.getPage((int) page.getPages(), pageSize);
+        }
+        return new DataResult(true, page);
+    }
+
+    @GetMapping("/{rec_del_flg}")
+    public DataResult getAllNotDel(@PathVariable(value = "rec_del_flg") int rec_del_flg) {
+        return new DataResult(true, attendanceService.getAllNotDel(rec_del_flg));
+    }
+
+    @GetMapping("/search/{currentPage}/{pageSize}")
+    public DataResult getAllBySearch(@PathVariable int currentPage, @PathVariable int pageSize, @RequestParam String attendance_date){
+        IPage<Attendance> page = attendanceService.getAllBySearch(currentPage, pageSize, attendance_date);
+        if (currentPage > page.getPages()){
+            page = attendanceService.getAllBySearch((int) page.getPages(), pageSize, attendance_date);
+        }
+        return new DataResult(true, page);
     }
 
 }

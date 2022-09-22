@@ -61,4 +61,9 @@ public class AttendanceMapperTest {
         queryWrapper.like(Attendance::getRecord_id,"100012022091401");
         attendanceMapper.selectList(queryWrapper);
     }
+
+    @Test
+    void deleteRecordTest(){
+        attendanceMapper.deleteById("100012022091402");
+    }
 }

@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.northsea.peoplemanagement.domain.Employee;
 import com.northsea.peoplemanagement.mapper.EmployeeMapper;
 import com.northsea.peoplemanagement.service.EmployeeService;
+import com.northsea.peoplemanagement.vo.EmployeeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,9 +32,15 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         return employeeMapper.updateById(employee) > 0;
     }
 
+    @Transactional
     @Override
     public boolean deleteEmployee(Integer id) {
         return employeeMapper.deleteById(id) > 0;
+    }
+
+    @Override
+    public EmployeeVO getEmployeeById(Integer employee_id){
+        return employeeMapper.getEmployeeById(employee_id);
     }
 
     @Override

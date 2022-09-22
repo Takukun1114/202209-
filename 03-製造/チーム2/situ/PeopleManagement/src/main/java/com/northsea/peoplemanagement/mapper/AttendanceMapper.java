@@ -1,12 +1,17 @@
 package com.northsea.peoplemanagement.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.northsea.peoplemanagement.domain.Attendance;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author BenSitu
@@ -24,5 +29,20 @@ public interface AttendanceMapper extends BaseMapper<Attendance> {
        @Select("select * from t_attendance")
        List<Attendance> getAll();
 
+       @Select("select * from t_attendance where rec_del_flg = #{rec_del_flg}")
+       List<Attendance> getAllNotDel(Integer del_flag);
 
+       @Select("select * from t_attendance where rec_del_flg = #{rec_del_flg} and attendance_date = #{attendance_date}")
+       List<Attendance> getAllOnSelectedDate(Integer rec_del_flg, String attendance_date);
+
+       @Update("update t_attendance set del_flg=1 where record_id = #{record_id}")
+       Attendance updateDelFlg(Attendance attendance);
 }
+
+
+
+
+
+
+
+

@@ -1,5 +1,7 @@
 package com.northsea.peoplemanagement.util;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.northsea.peoplemanagement.domain.Attendance;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +20,10 @@ public class DataResult {
 
     public DataResult(Boolean flag){
         this.flag = flag;
+    }
+
+    public DataResult(boolean flag, IPage<Attendance> page, String date) {
+        this.flag = flag;
+
     }
 }

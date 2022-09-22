@@ -1,6 +1,7 @@
 package com.northsea.peoplemanagement.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -17,6 +18,7 @@ public class Department {
     @TableId
     private String dept_id;
     private String dept_name;
+    @TableLogic
     private int del_flg;
     private Date create_date;
     private int create_user_id;

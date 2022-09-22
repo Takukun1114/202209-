@@ -21,19 +21,19 @@ public class EmployeeMapperTest {
 
     @Test
     void getByIdTest() {
-        //System.out.println(employeeMapper.getById(1));
+        System.out.println(employeeMapper.getEmployeeById(10001));
     }
 
     @Test
     void getByIdWithMpTest() {
-        System.out.println(employeeMapper.selectById(1));
+        System.out.println(employeeMapper.selectById(10001));
     }
 
     @Test
     void insertUserWithMpTest() {
         Employee employee = new Employee();
 
-        employee.setEmployee_id(6);
+        employee.setEmployee_id(10006);
         employee.setEmployee_name("田中二郎");
         employee.setPassword("12345678");
         employee.setEmployee_email("abc@gmail.com");
@@ -46,10 +46,10 @@ public class EmployeeMapperTest {
     @Test
     void updatetUserByIdWithMpTest() {
         Employee employee = new Employee();
-        employee.setEmployee_id(3);
+        employee.setEmployee_id(10006);
         employee.setEmployee_name("田中二郎");
         employee.setPassword("12345678");
-        employee.setEmployee_email("abc@gmail.com");
+        //employee.setEmployee_email("abcdefg@gmail.com");
         employee.setCreate_user_id(2);
         employee.setCreate_date(new java.util.Date());
         employee.setDept_id("1");

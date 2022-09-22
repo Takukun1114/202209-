@@ -1,11 +1,7 @@
 package com.northsea.peoplemanagement.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -25,6 +21,7 @@ public class Employee {
     @TableField(select = false)
     private String password;
     private String dept_id;
+    @TableLogic
     private Integer del_flg;
     private Date create_date;
     private Integer create_user_id;

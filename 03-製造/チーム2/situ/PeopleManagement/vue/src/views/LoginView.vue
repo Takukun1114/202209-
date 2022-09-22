@@ -45,7 +45,7 @@ export default {
     methods: {
       login () {
         this.$axios
-            .post('/login', {
+            .post('http://localhost:8090/employees', {
               employeeName: this.loginForm.employeeName,
               password: this.loginForm.password
             })
