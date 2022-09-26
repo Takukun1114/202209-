@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.northsea.peoplemanagement.domain.Attendance;
 import com.northsea.peoplemanagement.service.AttendanceService;
 import com.northsea.peoplemanagement.util.DataResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,15 +15,19 @@ import java.util.List;
  * @CreateDate 2022/9/14
  * @Description
  */
+
+@Slf4j
 @RestController
 @RequestMapping("/attendances")
 public class AttendanceController {
+
     @Autowired
     private AttendanceService attendanceService;
 
     @PostMapping
-    public DataResult save(@RequestBody Attendance attendance){
-        return new DataResult(true,attendanceService.save(attendance));
+    public DataResult saveAttendance(@RequestBody Attendance attendance){
+
+        return new DataResult(true, attendanceService.saveAttendance(attendance));
     }
 
     @GetMapping
@@ -31,13 +36,17 @@ public class AttendanceController {
     }
 
     @PutMapping
-    public DataResult update(@RequestBody Attendance attendance){
+    public DataResult updateAttendance(@RequestBody Attendance attendance){
         return new DataResult(true, attendanceService.updateAttendance(attendance));
     }
 
+    @PutMapping("/updates")
+    public DataResult updateExistingInfo(@RequestBody Attendance attendance) {
+        return new DataResult(true, attendanceService.updateById(attendance));
+    }
 
     @DeleteMapping("/delete/{record_id}")
-    public DataResult delete(@PathVariable String record_id ){
+    public DataResult deleteAttendance(@PathVariable String record_id ){
         return new DataResult(true, attendanceService.deleteAttendance(record_id));
     }
 

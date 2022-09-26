@@ -37,6 +37,9 @@ public interface AttendanceMapper extends BaseMapper<Attendance> {
 
        @Update("update t_attendance set del_flg=1 where record_id = #{record_id}")
        Attendance updateDelFlg(Attendance attendance);
+
+//       @Update("update t_attendance set record_id = #{record_id}, attendance_date = #{attendance_date}, start_time = #{start_time}, end_time = #{end_time}, rest_hours = #{rest_hours}, working_hours = #{working_hours}, overtime_hours = #{overtime_hours}, absence_hours = #{absence_hours}, working_status_id = #{working_status_id}, working_details = #{working_details}, update_date = #{}, update_user_id = #{update_user_id}, flow_status_id = #{flow_status_id} where record_id = #{record_id}")
+//       int updateWithAllInfo(Attendance attendance);
 }
 
 

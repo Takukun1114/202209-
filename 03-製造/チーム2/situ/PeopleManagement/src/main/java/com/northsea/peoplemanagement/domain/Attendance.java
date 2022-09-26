@@ -1,8 +1,6 @@
 package com.northsea.peoplemanagement.domain;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -26,8 +24,10 @@ public class Attendance {
     private double absence_hours;
     private int working_status_id;
     private String working_details;
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private Date create_date;
     private int create_user_id;
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private Date update_date;
     private int update_user_id;
     private int flow_status_id;

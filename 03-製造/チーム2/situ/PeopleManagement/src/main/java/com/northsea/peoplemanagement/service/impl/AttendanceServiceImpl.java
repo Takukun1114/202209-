@@ -2,6 +2,8 @@ package com.northsea.peoplemanagement.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -24,19 +26,32 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attenda
     @Autowired
     private AttendanceMapper attendanceMapper;
 
+    @Transactional
     @Override
     public boolean saveAttendance(Attendance attendance) {
         return attendanceMapper.insert(attendance) > 0;
     }
     //返回值为修改了多少行， 用大于0判断是否成功修改
 
+    @Transactional
     @Override
     public boolean updateAttendance(Attendance attendance) {
         return attendanceMapper.updateById(attendance) > 0;
     }
     //返回值为修改了多少行， 用大于0判断是否成功修改
 
+//    @Transactional
+//    @Override
+//    public boolean updateExistingInfo(record_id) {
+//        LambdaUpdateWrapper<Attendance> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
+//        lambdaUpdateWrapper.eq(Attendance::getRecord_id, record_id);
+//        Attendance attendance = new Attendance();
+//        attendance.setAttendance_date(attendance_date);
+//        attendance.setAbsence_hours(absence_hours);
+//        return attendanceMapper.update(attendance) > 0;
+//    }
 
+    @Transactional
     @Override
     public boolean deleteAttendance(String record_id) {
         return attendanceMapper.deleteById(record_id) > 0;
@@ -49,6 +64,7 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attenda
         return attendanceMapper.selectList(null);
     }
 
+    @Transactional
     @Override
     public Attendance getById(String id) {
         return attendanceMapper.selectById(id);

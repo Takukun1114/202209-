@@ -1,7 +1,6 @@
 package com.northsea.peoplemanagement.service.impl;
 
 import com.northsea.peoplemanagement.vo.LoginVO;
-import org.springframework.util.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.northsea.peoplemanagement.domain.Employee;
 import com.northsea.peoplemanagement.dto.LoginDTO;
@@ -10,6 +9,7 @@ import com.northsea.peoplemanagement.result.Result;
 import com.northsea.peoplemanagement.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.UUID;
 
@@ -25,14 +25,14 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public Result login(LoginDTO loginDTO) {
-        if (StringUtils.hasText(loginDTO.getEmployeeName())){
+        if (StringUtils.isEmpty(loginDTO.getEmployee_id())){
             return new Result(400, "ユーザーIDを入力してください","");
         }
-        if (StringUtils.hasText(loginDTO.getPassword())){
+        if (StringUtils.isEmpty(loginDTO.getPassword())){
             return new Result(400, "パスワードを入力してください","");
         }
         QueryWrapper<Employee> wrapper = new QueryWrapper<>();
-        wrapper.eq("employee_name", loginDTO.getEmployeeName());
+        wrapper.eq("employee_id", loginDTO.getEmployee_id());
         Employee employee = employeeMapper.selectOne(wrapper);
 
         if ((employee!=null && employee.getPassword().equals(loginDTO.getPassword()))){
@@ -41,8 +41,21 @@ public class LoginServiceImpl implements LoginService {
 
             loginVO.setToken(UUID.randomUUID().toString());
             loginVO.setEmployee(employee);
-            return new Result(200, "", loginVO);
+            return new Result(200, "", employee);
+
         }
-        return new Result(400, "ログインできません","");
+        return new Result(401, "ログインできません","");
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+

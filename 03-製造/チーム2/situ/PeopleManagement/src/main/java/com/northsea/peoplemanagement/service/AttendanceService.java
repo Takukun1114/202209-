@@ -3,6 +3,7 @@ package com.northsea.peoplemanagement.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.northsea.peoplemanagement.domain.Attendance;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,9 @@ public interface AttendanceService extends IService<Attendance> {
     boolean saveAttendance(Attendance attendance);
 
     boolean updateAttendance(Attendance attendance);
+
+//    @Transactional
+//    boolean updateExistingInfo(Attendance attendance);
 
     boolean deleteAttendance(String record_id);
 

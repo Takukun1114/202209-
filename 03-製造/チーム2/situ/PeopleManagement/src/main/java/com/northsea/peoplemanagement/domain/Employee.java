@@ -18,7 +18,7 @@ public class Employee {
     @TableId(type = IdType.AUTO)
     private Integer employee_id;
     private String employee_name;
-    @TableField(select = false)
+//    @TableField(select = false)
     private String password;
     private String dept_id;
     @TableLogic

@@ -1,16 +1,16 @@
 <template>
   <body id="login-page">
-  <el-form class="login-container" label-position="left" label-width="0px">
+  <el-form class="login-container" :model="loginForm" labelPosition="top" label-width="120px">
     <h3 class="login_title">システムログイン</h3>
-    <el-form-item>
+    <el-form-item prop="employeeId">
       <el-input
           type="text"
-          v-model="loginForm.employeeName"
+          v-model="loginForm.employee_id"
           auto-complete="off"
           placeholder="ユーザーID"
       ></el-input>
     </el-form-item>
-    <el-form-item>
+    <el-form-item prop="password">
       <el-input
           type="password"
           v-model="loginForm.password"
@@ -22,7 +22,7 @@
       <el-button
           type="primary"
           style="width: 100%;  border: none"
-          @click="login"
+          @click="login()"
       >ログイン</el-button>
     </el-form-item>
   </el-form>
@@ -36,7 +36,7 @@ export default {
     data () {
       return {
         loginForm: {
-          employeeName: '',
+          employee_id: '',
           password: ''
         },
         responseResult: []
@@ -45,17 +45,26 @@ export default {
     methods: {
       login () {
         this.$axios
-            .post('http://localhost:8090/employees', {
-              employeeName: this.loginForm.employeeName,
+            .post('http://localhost:8090/api/login', {
+              employee_id: this.loginForm.employee_id,
               password: this.loginForm.password
             })
-            .then(successResponse => {
-              if (successResponse.data.code === 200) {
-                this.$router.replace({path: '/'})
+            .then(res => {
+              if (res.data.code === 200) {
+                this.$message.success("ログインしました");
+                this.$router.push({
+                  name:'home',
+                  params: {
+                    employee_id: this.loginForm.employee_id
+                  }
+                })
+              } else if (res.data.code === 401){
+                this.$message.error(res.data.message)
+              } else if (res.data.code === 400){
+                this.$message.error(res.data.message)
               }
             })
-            .catch(failResponse => {
-            })
+            .catch(err => console.log(err))
       }
     }
   }

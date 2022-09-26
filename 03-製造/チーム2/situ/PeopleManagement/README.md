@@ -5,12 +5,15 @@
 
 ```shell
 cd vue
+npm i
 npm run serve
 ```
 
 
 
-ホーム入口: http://localhost:8080/
+ログイン入口: http://localhost:8080/login
+
+<!--userid: 10001        password:12341234 -->
 
 詳細入口: http://localhost:8080/details
 
