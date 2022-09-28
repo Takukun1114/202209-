@@ -3,10 +3,8 @@ package com.northsea.peoplemanagement.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.northsea.peoplemanagement.domain.Attendance;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author BenSitu

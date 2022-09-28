@@ -8,7 +8,7 @@
           <template slot="title"><i class="el-icon-menu"></i>勤怠管理</template>
           <el-menu-item-group>
             <el-menu-item index="/" class="menuItem">
-              <router-link :to="{name: 'home', params: {employee_id:this.employee_info.employee_id}}" class="menuLink">ホーム
+              <router-link :to="{name: 'home', params: {employee_id:this.employee_info.employee_id}}" class="menuLink">一覧
               </router-link>
             </el-menu-item>
             <el-menu-item index="/details" class="menuItem">
@@ -54,7 +54,7 @@
       <el-main>
         <div class="breadcrumb">
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">ホーム</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/' }">一覧</el-breadcrumb-item>
             <el-breadcrumb-item>詳細</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
@@ -69,7 +69,7 @@
                   type="date"
                   value-format="yyyy-MM-dd"
                   @change=""
-                  placeholder="日付を選択してください">
+                  placeholder="日付選択">
               </el-date-picker>
               <el-button class="ml-5" type="primary" icon="el-icon-search" @click="searchInfo()">検索</el-button>
             </div>

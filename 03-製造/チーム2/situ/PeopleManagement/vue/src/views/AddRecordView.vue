@@ -9,15 +9,18 @@
           <el-menu-item-group>
             <template slot="title"></template>
             <el-menu-item index="/" class="menuItem">
-              <router-link :to="{name: 'home', params: {employee_id:this.employee_info.employee_id}}" class="menuLink">ホーム
+              <router-link :to="{name: 'home', params: {employee_id:this.employee_info.employee_id}}" class="menuLink">
+                一覧
               </router-link>
             </el-menu-item>
             <el-menu-item index="/details" class="menuItem">
-              <router-link :to="{name: 'Details', params:{employee_id:this.employee_info.employee_id}}" class="menuLink">詳細
+              <router-link :to="{name: 'Details', params:{employee_id:this.employee_info.employee_id}}"
+                           class="menuLink">詳細
               </router-link>
             </el-menu-item>
             <el-menu-item index="/addrecord" class="menuItem">
-              <router-link :to="{name: 'Addrecord', params: {employee_id:this.employee_info.employee_id}}" class="menuLink">登録
+              <router-link :to="{name: 'Addrecord', params: {employee_id:this.employee_info.employee_id}}"
+                           class="menuLink">登録
               </router-link>
             </el-menu-item>
           </el-menu-item-group>
@@ -55,8 +58,8 @@
       <el-main>
         <div class="breadcrumb">
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">ホーム</el-breadcrumb-item>
-            <el-breadcrumb-item>詳細</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/' }">一覧</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/details' }">詳細</el-breadcrumb-item>
             <el-breadcrumb-item>登録</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
@@ -201,7 +204,7 @@ export default {
     }
   },
   created() {
-    if (this.$route.params.employee_id != null){
+    if (this.$route.params.employee_id != null) {
       this.employee_info.employee_id = this.$route.params.employee_id;
     } else {
       this.employee_info.employee_id = 10001;
@@ -250,12 +253,17 @@ export default {
       let startTimeDate = new Date(inputDate + ' ' + this.form.start_time + ':00');
       let endTimeDate = new Date(inputDate + ' ' + this.form.end_time + ':00');
       let restHours = parseFloat(this.form.rest_hours).toFixed(1);
+      let workingHours = 8;
       let absenceHours = parseFloat(this.form.absence_hours).toFixed(1);
       if (typeof inputDate == "undefined" || inputDate == null || inputDate === "" || typeof startTimeDate == "undefined" || startTimeDate == null || startTimeDate === "" || typeof endTimeDate == "undefined" || endTimeDate == null || endTimeDate === "" || typeof restHours == "undefined" || restHours == null || restHours === "" || typeof absenceHours == "undefined" || absenceHours == null || absenceHours === "") {
         return;
       }
 
       let calculateResult = endTimeDate.getTime() - startTimeDate.getTime();
+      if (calculateResult < 0) {
+        this.$message.error("エラー、終了時間 ＜ 開始時間");
+        return;
+      }
       if (isNaN(calculateResult)) {
         console.log("Data error");
       } else {
@@ -263,8 +271,9 @@ export default {
         this.timeCalculation.defferentMinute = parseInt(Math.floor(((Math.floor(calculateResult / (1000 * 60 * 60))) - this.timeCalculation.differentHour) * 60));
         this.timeCalculation.differentTime = parseFloat(this.timeCalculation.differentHour + '.' + this.timeCalculation.defferentMinute).toFixed(1);
       }
-      (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - 8)) > 0 ? (this.form.overtime_hours = Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - 8)) : (0);
-      (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - this.form.overtime_hours)) > 0 ? (this.form.working_hours = Math.floor(this.timeCalculation.differentTime - restHours - absenceHours)) : (0);
+      this.form.working_hours = workingHours;
+      (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - workingHours)) > 0 ? (this.form.overtime_hours = Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - workingHours)) : (this.form.overtime_hours = 0);
+      (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - this.form.overtime_hours)) > 0 ? (this.form.working_hours = (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours))>8?8:Math.floor(this.timeCalculation.differentTime - restHours - absenceHours)) : (this.form.working_hours = 0);
 
     },
     resetform() {
@@ -312,6 +321,7 @@ export default {
   border-radius: 4px;
   min-height: 36px;
 }
+
 .menuLink {
   width: 100%;
   display: block;
@@ -319,6 +329,7 @@ export default {
   text-decoration: none;
   color: white;
 }
+
 .menuItem {
   padding-right: 0 !important;
 }

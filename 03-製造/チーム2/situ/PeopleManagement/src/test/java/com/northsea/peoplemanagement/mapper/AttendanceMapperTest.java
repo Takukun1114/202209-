@@ -37,10 +37,10 @@ public class AttendanceMapperTest {
         attendance.setStart_time("");
         attendance.setEnd_time("");
         attendance.setAttendance_date("2022-09-15");
-        attendance.setWorking_hours(8);
-        attendance.setRest_hours(1);
-        attendance.setOvertime_hours(0);
-        attendance.setAbsence_hours(0);
+        attendance.setWorking_hours(8.0);
+        attendance.setRest_hours(1.0);
+        attendance.setOvertime_hours(0.0);
+        attendance.setAbsence_hours(0.0);
         attendanceMapper.insert(attendance);
     }
 
@@ -65,5 +65,13 @@ public class AttendanceMapperTest {
     @Test
     void deleteRecordTest(){
         attendanceMapper.deleteById("100012022091402");
+    }
+
+    //OptimisticLockerInnerInterceptor Test
+    @Test
+    void OptimisticLockerTest(){
+        Attendance attendance = attendanceMapper.selectById("100012022091401") ;
+        attendance.setFlow_status_id(2);
+        attendanceMapper.updateById(attendance);
     }
 }

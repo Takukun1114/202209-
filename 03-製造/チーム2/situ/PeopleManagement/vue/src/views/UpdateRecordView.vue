@@ -9,7 +9,7 @@
           <el-menu-item-group>
             <template slot="title"></template>
             <el-menu-item index="/" class="menuItem">
-              <router-link :to="{name: 'home', params: {employee_id:this.employee_info.employee_id}}" class="menuLink">ホーム
+              <router-link :to="{name: 'home', params: {employee_id:this.employee_info.employee_id}}" class="menuLink">一覧
               </router-link>
             </el-menu-item>
             <el-menu-item index="/details" class="menuItem">
@@ -55,8 +55,8 @@
       <el-main>
         <div class="breadcrumb">
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">ホーム</el-breadcrumb-item>
-            <el-breadcrumb-item>詳細</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/' }">一覧</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/details' }">詳細</el-breadcrumb-item>
             <el-breadcrumb-item>更新</el-breadcrumb-item>
           </el-breadcrumb>
         </div>

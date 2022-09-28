@@ -28,10 +28,10 @@ public class AttendanceServiceTest {
         attendance.setStart_time("");
         attendance.setEnd_time("");
         attendance.setAttendance_date("2022-09-15");
-        attendance.setWorking_hours(8);
-        attendance.setRest_hours(1);
-        attendance.setOvertime_hours(0);
-        attendance.setAbsence_hours(0);
+        attendance.setWorking_hours(8.0);
+        attendance.setRest_hours(1.0);
+        attendance.setOvertime_hours(0.0);
+        attendance.setAbsence_hours(0.0);
         attendance.setRec_del_flg(0);
         attendance.setWorking_details("Code!");
         attendanceService.save(attendance);

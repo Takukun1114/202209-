@@ -17,23 +17,24 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 DROP TABLE IF EXISTS `t_attendance`;
 CREATE TABLE IF NOT EXISTS `t_attendance` (
-`record_id` VARCHAR(15) NOT NULL COMMENT '記録番号',
-`attendance_date`VARCHAR(10) COMMENT '日付',
-`start_time`VARCHAR(5) COMMENT '出勤時間',
-`end_time` VARCHAR(5) COMMENT '退勤時間',
-`rest_hours`DECIMAL(3,1) COMMENT '休憩時間',
-`working_hours` DECIMAL(3,1) COMMENT '作業時間',
-`overtime_hours` DECIMAL(3,1) COMMENT '残業時間',
-`absence_hours` DECIMAL(3,1) COMMENT '欠勤時間',
-`working_status_id` INT COMMENT '状態ID',
-`working_details` VARCHAR(200) COMMENT '作業内容',
-`create_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '作成日時',
-`create_user_id` INT COMMENT '作成者id',
-`update_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '更新日時',
-`update_user_id` INT COMMENT '更新者id',
-`flow_status_id` INT(1) COMMENT 'フロー状態ID',
-`rec_del_flg` INT(1) DEFAULT '0' COMMENT '削除フラグ',
-PRIMARY KEY (`record_id`)
+  `record_id` varchar(15) NOT NULL COMMENT '記録番号',
+  `attendance_date` varchar(10) DEFAULT NULL COMMENT '日付',
+  `start_time` varchar(5) DEFAULT NULL COMMENT '出勤時間',
+  `end_time` varchar(5) DEFAULT NULL COMMENT '退勤時間',
+  `rest_hours` decimal(3,1) DEFAULT NULL COMMENT '休憩時間',
+  `working_hours` decimal(3,1) DEFAULT NULL COMMENT '作業時間',
+  `overtime_hours` decimal(3,1) DEFAULT NULL COMMENT '残業時間',
+  `absence_hours` decimal(3,1) DEFAULT NULL COMMENT '欠勤時間',
+  `working_status_id` int DEFAULT NULL COMMENT '状態ID',
+  `working_details` varchar(200) DEFAULT NULL COMMENT '作業内容',
+  `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `create_user_id` int DEFAULT NULL COMMENT '作成者id',
+  `update_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_user_id` int DEFAULT NULL COMMENT '更新者id',
+  `flow_status_id` int DEFAULT NULL COMMENT 'フロー状態ID',
+  `rec_del_flg` int DEFAULT NULL COMMENT '削除フラグ',
+  `version` int DEFAULT '1' COMMENT '乐观锁',
+  PRIMARY KEY (`record_id`)
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 
@@ -75,15 +76,15 @@ PRIMARY KEY (`flow_status_id`)
 );
 
 DROP TABLE IF EXISTS `m_attendance_ym`;
-CREATE TABLE IF NOT EXISTS `m_attendance_ym` (
-`attendance_ym` VARCHAR(7) NOT NULL COMMENT '勤怠年月',
-`display_flg` INT(1) COMMENT '表示フラグ',
-`del_flg` INT(1) DEFAULT '0' COMMENT '削除フラグ',
-`create_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '作成日時',
-`create_user_id` INT COMMENT '作成者id',
-`update_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '更新日時',
-`update_user_id` INT COMMENT '更新者id',
-PRIMARY KEY (`attendance_ym`)
-);
-
+CREATE TABLE `m_attendance_ym` (
+  `id` int DEFAULT NULL AUTO_INCREMENT=1 COMMENT '主键',
+  `attendance_ym` varchar(7) NOT NULL COMMENT '勤怠年月',
+  `display_flg` int DEFAULT NULL COMMENT '表示フラグ',
+  `del_flg` int DEFAULT '0' COMMENT '削除フラグ',
+  `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '作成日時',
+  `create_user_id` int DEFAULT NULL COMMENT '作成者id',
+  `update_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新日時',
+  `update_user_id` int DEFAULT NULL COMMENT '更新者id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
