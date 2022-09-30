@@ -1,6 +1,7 @@
 package com.northsea.peoplemanagement.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -89,11 +90,17 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attenda
         return page;
     }
 
+    @Transactional
     @Override
-    public IPage<Attendance> getPage(int currentPage, int pageSize, Attendance attendance) {
+    public IPage<Attendance> getMonthPage(String yearMonth, int currentPage, int pageSize) {
+        StringBuilder stringBuilder = new StringBuilder(yearMonth);
+        stringBuilder.insert(4, "-");
         IPage<Attendance> page = new Page<>(currentPage, pageSize);
-        attendanceMapper.selectPage(page, null);
-        return page;
+        LambdaQueryWrapper<Attendance> queryWrapper = new LambdaQueryWrapper<>();
+        if (!StringUtils.isEmpty(yearMonth)){
+            queryWrapper.likeRight(Attendance::getAttendance_date, String.valueOf(stringBuilder));
+        }
+        return attendanceMapper.selectPage(page, queryWrapper);
     }
 
     @Transactional

@@ -32,7 +32,7 @@ public interface AttendanceService extends IService<Attendance> {
 
     IPage<Attendance> getPage(int currentPage, int pageSize);
 
-    IPage<Attendance> getPage(int currentPage, int pageSize, Attendance attendance);
+    IPage<Attendance> getMonthPage(String month, int currentPage, int pageSize);
 
     IPage<Attendance> getAllBySearch(int currentPage, int pageSize, String attendance_date);
 

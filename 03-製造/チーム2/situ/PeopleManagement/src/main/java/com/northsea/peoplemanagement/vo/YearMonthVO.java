@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class YearMonthVO {
     private String month;
-    private Integer days;
+    private Integer working_days;
     private Integer attendance_days;
     private Integer absence_days;
     private Integer attendance_hours;

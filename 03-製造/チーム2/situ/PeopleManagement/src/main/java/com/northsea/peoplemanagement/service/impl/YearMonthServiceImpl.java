@@ -29,9 +29,10 @@ public class YearMonthServiceImpl extends ServiceImpl<YearMonthMapper, YearMonth
     }
 
     @Override
-    public List<YearMonth> getByYear(String year) {
+    public List<YearMonth> getByYear(String year, String employee_id) {
         LambdaQueryWrapper<YearMonth> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.likeRight(YearMonth::getAttendance_ym, year);
+        queryWrapper.eq(YearMonth::getCreate_user_id, employee_id);
         List<YearMonth> yearMonthList = yearMonthMapper.selectList(queryWrapper);
         return yearMonthList;
     }

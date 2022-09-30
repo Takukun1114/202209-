@@ -64,6 +64,15 @@ public class AttendanceController {
         return new DataResult(true, page);
     }
 
+    @GetMapping("/{month}/{currentPage}/{pageSize}")
+    public DataResult getMonthPage(@PathVariable String month, @PathVariable int currentPage, @PathVariable int pageSize){
+        IPage<Attendance> page = attendanceService.getMonthPage(month, currentPage, pageSize);
+        if (currentPage > page.getPages()){
+            page = attendanceService.getMonthPage(month, (int) page.getPages(), pageSize);
+        }
+        return new DataResult(true, page);
+    }
+
     @GetMapping("/{rec_del_flg}")
     public DataResult getAllNotDel(@PathVariable(value = "rec_del_flg") int rec_del_flg) {
         return new DataResult(true, attendanceService.getAllNotDel(rec_del_flg));

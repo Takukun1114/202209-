@@ -23,7 +23,8 @@
           type="primary"
           style="width: 100%;  border: none"
           @click="login()"
-      >ログイン</el-button>
+      >ログイン
+      </el-button>
     </el-form-item>
   </el-form>
   </body>
@@ -32,42 +33,50 @@
 
 <script>
 export default {
-    name: 'Login',
-    data () {
-      return {
-        loginForm: {
-          employee_id: '',
-          password: ''
-        },
-        responseResult: []
+  name: 'Login',
+  data() {
+    return {
+      loginForm: {
+        employee_id: '',
+        password: ''
+      },
+      responseResult: []
+    }
+  },
+  created() {
+    this.checkStatus();
+  },
+  methods: {
+    login() {
+      this.$axios
+          .post('http://localhost:8090/api/login', {
+            employee_id: this.loginForm.employee_id,
+            password: this.loginForm.password
+          })
+          .then(res => {
+            if (res.data.code === 200) {
+              this.$message.success("ログインしました");
+              this.$router.push({
+                name: 'home',
+                params: {
+                  employee_id: this.loginForm.employee_id
+                }
+              })
+            } else if (res.data.code === 401) {
+              this.$message.error(res.data.message)
+            } else if (res.data.code === 400) {
+              this.$message.error(res.data.message)
+            }
+          })
+          .catch(err => console.log(err))
+    },
+    checkStatus(){
+      if (this.$route.params.message != null){
+        this.$message.info(this.$route.params.message);
       }
     },
-    methods: {
-      login () {
-        this.$axios
-            .post('http://localhost:8090/api/login', {
-              employee_id: this.loginForm.employee_id,
-              password: this.loginForm.password
-            })
-            .then(res => {
-              if (res.data.code === 200) {
-                this.$message.success("ログインしました");
-                this.$router.push({
-                  name:'home',
-                  params: {
-                    employee_id: this.loginForm.employee_id
-                  }
-                })
-              } else if (res.data.code === 401){
-                this.$message.error(res.data.message)
-              } else if (res.data.code === 400){
-                this.$message.error(res.data.message)
-              }
-            })
-            .catch(err => console.log(err))
-      }
-    }
   }
+}
 </script>
 
 <style scoped>
@@ -79,9 +88,11 @@ export default {
   background-size: cover;
   position: fixed;
 }
+
 body {
   margin: 0;
 }
+
 .login-container {
   border-radius: 15px;
   background-clip: padding-box;

@@ -37,7 +37,7 @@ public class YearMonthServiceTest {
 
     @Test
     void getByYear(){
-        yearMonthService.getByYear("2020");
+        yearMonthService.getByYear("2022", "10001");
     }
 
 }

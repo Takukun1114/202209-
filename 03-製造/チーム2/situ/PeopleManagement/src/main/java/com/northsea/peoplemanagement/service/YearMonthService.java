@@ -16,7 +16,7 @@ public interface YearMonthService extends IService<YearMonth> {
 
     YearMonth getByYearMonth(String yearMonth);
 
-    List<YearMonth> getByYear(String year);
+    List<YearMonth> getByYear(String year, String employee_id);
 
     List<YearMonth> getAll();
 

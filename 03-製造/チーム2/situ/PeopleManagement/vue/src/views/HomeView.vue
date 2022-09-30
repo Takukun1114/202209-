@@ -10,15 +10,18 @@
           <el-menu-item-group>
             <template slot="title"></template>
             <el-menu-item index="/" class="menuItem">
-              <router-link :to="{name: 'home', params: {employee_id:this.employee_info.employee_id}}" class="menuLink">一覧
+              <router-link :to="{name: 'home', params: {employee_id:this.employee_info.employee_id}}" class="menuLink">
+                一覧
               </router-link>
             </el-menu-item>
             <el-menu-item index="/details" class="menuItem">
-              <router-link :to="{name: 'Details', params:{employee_id:this.employee_info.employee_id}}" class="menuLink">詳細
+              <router-link :to="{name: 'Details', params:{employee_id:this.employee_info.employee_id}}"
+                           class="menuLink">詳細
               </router-link>
             </el-menu-item>
             <el-menu-item index="/addrecord" class="menuItem">
-              <router-link :to="{name: 'Addrecord', params:{employee_id:this.employee_info.employee_id}}" class="menuLink">登録
+              <router-link :to="{name: 'Addrecord', params:{employee_id:this.employee_info.employee_id}}"
+                           class="menuLink">登録
               </router-link>
 
             </el-menu-item>
@@ -61,26 +64,38 @@
           </el-breadcrumb>
         </div>
 
-
-
         <div style="margin-top: 50px">
-          <div class="block">
-            <span class="demonstration"></span>
-            <el-date-picker
-                v-model="selectedyear"
-                type="year"
-                :pickerOptions="pickerOptions"
-                placeholder="年選択"
-                format="yyyy"
-                value-format="yyyy">
-            </el-date-picker>
-            <el-button class="ml-5" type="primary" icon="el-icon-search" @click="getAttendanceData()">検索</el-button>
+          <div class="searchBox floatLeft">
+            <div class="block">
+              <span class="demonstration"></span>
+              <el-date-picker
+                  v-model="selectedYear"
+                  type="year"
+                  :pickerOptions="pickerOptions"
+                  placeholder="年選択"
+                  format="yyyy"
+                  value-format="yyyy">
+              </el-date-picker>
+              <el-button class="ml-5" type="primary" icon="el-icon-search" @click="getAttendanceData()">検索</el-button>
+            </div>
           </div>
+          <div class="goBack floatRight">
+            <el-button class="ml-5" type="info" @click="handleBack()">ログアウト</el-button>
+          </div>
+          <div class="cleanBoth">
+          </div>
+        </div>
           <el-table :data="monthData" show-summary stripe border style="width: 100%" class="mt-20">
             <el-table-column prop="attendance_ym" align="center" label="月">
-              <template slot-scope="scope">{{scope.row.attendance_ym | converMonth}}</template>
+              <template v-slot="monthsScope">
+                <el-button type="text" size="medium" @click="searchTargetMonthData(monthsScope.row)">
+                  {{ monthsScope.row.attendance_ym | converMonth }}
+                </el-button>
+              </template>
             </el-table-column>
-            <el-table-column prop="days" align="center" label="営業日数">
+            <el-table-column prop="working_days" align="center" label="営業日数">
+              <template v-slot="daysScope"><span>{{ daysScope.row.attendance_ym | calculateMonthDays(that) }}</span>
+              </template>
             </el-table-column>
             <el-table-column prop="attendance_days" align="center" label="出勤日数">
             </el-table-column>
@@ -90,12 +105,9 @@
             </el-table-column>
             <el-table-column prop="overtime_hours" align="center" label="残業時間">
             </el-table-column>
-            <el-table-column prop="comments" align="center" label="コメンと">
+            <el-table-column prop="comments" align="center" label="コメント">
             </el-table-column>
-
           </el-table>
-        </div>
-
 
       </el-main>
     </el-container>
@@ -105,14 +117,35 @@
 <script>
 // @ is an alias to /src
 
-import AddRecordView from "@/views/AddRecordView";
 
 export default {
   name: 'HomeView',
-  filters:{
+  filters: {
     converMonth(value) {
-      if (value != null){
+      if (value != null) {
         return value.substring(4);
+      }
+    },
+    calculateMonthDays(value, that) {
+      if (value != null) {
+        let currentMonth = value.substring(4);
+        while (currentMonth.charAt(0) === '0') {
+          currentMonth = currentMonth.substring(1);
+        }
+        let year = parseInt(that.selectedYear);
+        let month = parseInt(currentMonth);
+        let firstDate = 1;
+        let lastDate = new Date(year, month, 0).getDate();
+        let first = new Date(year, month - 1, firstDate).getTime();
+        let last = new Date(year, month - 1, lastDate).getTime();
+        let count = 0;
+        for (let j = first; j <= last; j += 24 * 3600 * 1000) {
+          let workDay = new Date(j);
+          if (workDay.getDay() >= 1 && workDay.getDay() <= 5) {
+            count++;
+          }
+        }
+        return count;
       }
     }
   },
@@ -122,31 +155,34 @@ export default {
         employee_id: '',
         employee_name: '',
         department_name: '',
+        message: 'ログアウトしました',
       },
-      monthData:[],
-      month:'',
-      days:'',
-      attendance_days:'',
-      absence_days:'',
-      attendance_hours:'',
-      overtime_hours:'',
-      comments:'',
-      selectedyear: '',
+      monthData: [],
+      working_days: '',
+      attendance_days: '',
+      absence_days: '',
+      attendance_hours: '',
+      overtime_hours: '',
+      comments: '',
+      selectedYear: '',
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now();
         },
       },
+      that: this,
     }
   },
   created() {
-    if (this.$route.params.employee_id != null){
+    if (this.$route.params.employee_id != null) {
       this.employee_info.employee_id = this.$route.params.employee_id;
     } else {
       this.employee_info.employee_id = 10001;
     }
     this.getEmployeeInfo(this.employee_info.employee_id);
-    this.getAttendanceData(new Date().getFullYear())
+    this.selectedYear = (new Date().getFullYear()).toString();
+    this.getAttendanceData();
+
   },
   methods: {
     getEmployeeInfo(employeeID) {
@@ -156,32 +192,41 @@ export default {
         this.employee_info.department_name = res.data.data.dept_name;
       }).catch(err => console.log(err));
     },
-    getAttendanceData(){
-      let year = this.selectedyear;
-      this.$axios.get("http://localhost:8090/lists/"+ year).then((res)=>{
+    getAttendanceData() {
+      this.$axios.get("http://localhost:8090/lists?year=" + this.selectedYear + "&employee_id=" + this.employee_info.employee_id).then((res) => {
         this.monthData = res.data.data;
-
-        for (let i = 0; i < this.monthData.length; i++) {
-          this.checkData(i);
-        }
       }).catch(err => console.log(err));
     },
-    checkData(i){
-
-      this.month = (this.monthData[i].attendance_ym).substring(4);
+    searchTargetMonthData(row) {
+      this.$router.push({
+        name: 'Details',
+        params: {
+          attendance_ym: row.attendance_ym,
+          employee_id: this.employee_info.employee_id,
+        }
+      })
     },
-  }
+    handleBack() {
+      this.$router.push({
+        name: 'Login',
+        params: {
+          message: this.employee_info.message,
+        }
+      })
+    },
+  },
+  computed: {},
 }
 </script>
 
 <style>
-.el-header {
+el-header {
   background-color: #B3C0D1;
   color: #333;
   line-height: 60px;
 }
 
-.el-aside {
+el-aside {
   color: #333;
 }
 
@@ -195,5 +240,9 @@ export default {
 
 .menuItem {
   padding-right: 0 !important;
+}
+
+.searchBox, .goBack {
+  margin: 10px 0;
 }
 </style>

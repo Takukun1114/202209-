@@ -6,10 +6,7 @@ import com.northsea.peoplemanagement.service.YearMonthService;
 import com.northsea.peoplemanagement.util.DataResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author BenSitu
@@ -23,11 +20,6 @@ public class YearMonthController {
     @Autowired
     private YearMonthService yearMonthService;
 
-    @GetMapping
-    public DataResult getAll(){
-        return new DataResult(true, yearMonthService.getAll());
-    }
-
     @GetMapping("/{currentPage}/{pageSize}")
     public DataResult getPages(@PathVariable int currentPage, @PathVariable int pageSize){
         IPage<YearMonth> page = yearMonthService.getPage(currentPage, pageSize);
@@ -37,9 +29,13 @@ public class YearMonthController {
         return new DataResult(true, page);
     }
 
-    @GetMapping("/{year}")
-    public DataResult getByYear(@PathVariable String year){
-        System.out.println(year);
-        return new DataResult(true, yearMonthService.getByYear(year));
+    @GetMapping()
+    public DataResult getByYear(@RequestParam String year, @RequestParam String employee_id){
+        return new DataResult(true, yearMonthService.getByYear(year, employee_id));
+    }
+
+    @GetMapping("/{year}/{month}")
+    public DataResult getDataByMonth(@PathVariable String year, @PathVariable String month){
+        return new DataResult(true, yearMonthService.getByYearMonth(null));
     }
 }

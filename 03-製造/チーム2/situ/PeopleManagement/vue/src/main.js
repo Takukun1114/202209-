@@ -6,6 +6,7 @@ import locale from 'element-ui/lib/locale/lang/ja';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/global.css';
 import axios from 'axios';
+import 'default-passive-events';
 
 Vue.config.productionTip = false
 Vue.use(ElementUI, {locale});

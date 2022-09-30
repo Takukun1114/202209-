@@ -21,19 +21,21 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- Table structure for t_employee
 -- ----------------------------
 DROP TABLE IF EXISTS `t_employee`;
-CREATE TABLE `t_employee` (
-  `employee_id` int NOT NULL AUTO_INCREMENT,
-  `employee_name` varchar(100) NOT NULL COMMENT '社員名称',
-  `password` varchar(8) NOT NULL COMMENT 'パスワード',
-  `dept_id` varchar(10) DEFAULT NULL COMMENT '所属部門ID',
-  `del_flg` int DEFAULT '0' COMMENT '削除フラグ',
-  `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `create_user_id` int DEFAULT NULL COMMENT '作成者id',
-  `update_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_user_id` int DEFAULT NULL COMMENT '更新者id',
-  `employee_email` varchar(50) DEFAULT NULL COMMENT '社員メールアドレス',
-  PRIMARY KEY (`employee_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=10007 DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC;
+CREATE TABLE IF NOT EXISTS `t_employee` (
+`employee_id` INT(5) NOT NULL AUTO_INCREMENT=10000 COMMENT '社員ID',
+`employee_name` VARCHAR(100) NOT NULL COMMENT '社員名称',
+`password` VARCHAR(8) NOT NULL COMMENT 'パスワード',
+`dept_id` VARCHAR(10) COMMENT '所属部門ID',
+`del_flg` TINYINT(1) DEFAULT '0' COMMENT '削除フラグ',
+`create_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '作成日時',
+`create_user_id` INT(5) COMMENT '作成者id',
+`update_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日時',
+`update_user_id` INT(5) COMMENT '更新者id',
+`employee_email` VARCHAR(50) DEFAULT NULL COMMENT '社員メールアドレス',
+`version` SMALLINT DEFAULT '1' COMMENT '楽観鎖',
+PRIMARY KEY (`employee_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT AUTO_INCREMENT=1 CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT = Dynamic;
+SET FOREIGN_KEY_CHECKS = 1;
 
 -- ----------------------------
 -- Records of t_employee

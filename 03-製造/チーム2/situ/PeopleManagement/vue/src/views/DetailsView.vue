@@ -8,15 +8,18 @@
           <template slot="title"><i class="el-icon-menu"></i>勤怠管理</template>
           <el-menu-item-group>
             <el-menu-item index="/" class="menuItem">
-              <router-link :to="{name: 'home', params: {employee_id:this.employee_info.employee_id}}" class="menuLink">一覧
+              <router-link :to="{name: 'home', params: {employee_id:this.employee_info.employee_id}}" class="menuLink">
+                一覧
               </router-link>
             </el-menu-item>
             <el-menu-item index="/details" class="menuItem">
-              <router-link :to="{name: 'Details', params:{employee_id:this.employee_info.employee_id}}" class="menuLink">詳細
+              <router-link :to="{name: 'Details', params:{employee_id:this.employee_info.employee_id}}"
+                           class="menuLink">詳細
               </router-link>
             </el-menu-item>
             <el-menu-item index="/addrecord" class="menuItem">
-              <router-link :to="{name: 'Addrecord', params: {employee_id:this.employee_info.employee_id}}" class="menuLink">登録
+              <router-link :to="{name: 'Addrecord', params: {employee_id:this.employee_info.employee_id}}"
+                           class="menuLink">登録
               </router-link>
             </el-menu-item>
           </el-menu-item-group>
@@ -104,7 +107,7 @@
           <el-table-column prop="working_details" align="center" label="作業内容">
           </el-table-column>
           <el-table-column align="center" label="操作">
-            <template slot-scope="scope">
+            <template v-slot="scope">
               <el-button
                   size="mini"
                   type="warning"
@@ -174,13 +177,13 @@ export default {
     }
   },
   created() {
-    if (this.$route.params.employee_id != null){
+    if (this.$route.params.employee_id != null) {
       this.employee_info.employee_id = this.$route.params.employee_id;
     } else {
       this.employee_info.employee_id = 10001;
     }
     this.getEmployeeInfo(this.employee_info.employee_id);
-    this.getAll();
+    this.loadData();
   },
   methods: {
     searchInfo() {
@@ -203,6 +206,24 @@ export default {
         this.pagination.total = res.data.data.total;
         this.dataList = res.data.data.records;
       }).catch(err => console.log(err));
+    },
+    getByMonth() {
+      if (this.$route.params.attendance_ym != null) {
+        let month = this.$route.params.attendance_ym;
+        this.$axios.get("http://localhost:8090/attendances/" + month + "/" + this.pagination.currentPage + "/" + this.pagination.pageSize).then((res) => {
+          this.pagination.pageSize = res.data.data.size;
+          this.pagination.currentPage = res.data.data.current;
+          this.pagination.total = res.data.data.total;
+          this.dataList = res.data.data.records;
+        }).catch(err => console.log(err));
+      }
+    },
+    loadData() {
+      if (this.$route.params.attendance_ym == null) {
+        this.getAll();
+      } else {
+        this.getByMonth();
+      }
     },
     handleCurrentChange(currentPage) {
       this.pagination.currentPage = currentPage;
@@ -282,6 +303,7 @@ export default {
   text-decoration: none;
   color: white;
 }
+
 .menuItem {
   padding-right: 0 !important;
 }

@@ -103,15 +103,15 @@
                     <el-input step="0.1" type="number" v-model.number="form.absence_hours" placeholder="0" :disabled="this.futureDay"></el-input>
                   </el-form-item>
                   <el-form-item label="労働時間">
-                    <el-input type="number" v-model.number="form.working_hours" :placeholder="this.futureDay?'0':'計算中...'" :disabled="this.futureDay"
+                    <el-input type="number" v-model.number="form.working_hours" :placeholder="checkFutureDate" :disabled="this.futureDay"
                               readonly></el-input>
                   </el-form-item>
                   <el-form-item label="残業時間">
-                    <el-input type="number" v-model.number="form.overtime_hours" :placeholder="this.futureDay?'0':'計算中...'" :disabled="this.futureDay"
+                    <el-input type="number" v-model.number="form.overtime_hours" :placeholder="checkFutureDate" :disabled="this.futureDay"
                               readonly></el-input>
                   </el-form-item>
                   <el-form-item label="出勤状態">
-                    <el-select v-model="form.working_status_id" placeholder="状態選択">
+                    <el-select v-model="form.working_status_id" placeholder="状態選択" value="">
                       <el-option v-for="item in options" :key="item.value" :label="item.label"
                                  :value="item.value"></el-option>
                     </el-select>
@@ -216,6 +216,7 @@ export default {
                 name: 'Details',
                 params: {
                   employee_id: this.employee_info.employee_id,
+                  attendance_ym: (this.form.attendance_date).replace(/-/g, '').slice(0,6),
                 }
               })
             } else {
@@ -258,6 +259,11 @@ export default {
       } else if (iDate.getTime() - nowDate.getTime() <= 0) {
         this.futureDay = false;
       }
+    },
+  },
+  computed: {
+    checkFutureDate() {
+      return this.futureDay ? '0' : '計算中...';
     },
   }
 }

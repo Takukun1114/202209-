@@ -113,12 +113,12 @@
                   </el-form-item>
                   <el-form-item label="労働時間">
                     <el-input type="number" v-model.number="form.working_hours"
-                              :placeholder="this.futureDay?'0':'計算中...'" :disabled="this.futureDay"
+                              :placeholder="checkFutureDate" :disabled="this.futureDay"
                               readonly></el-input>
                   </el-form-item>
                   <el-form-item label="残業時間">
                     <el-input type="number" v-model.number="form.overtime_hours"
-                              :placeholder="this.futureDay?'0':'計算中...'" :disabled="this.futureDay"
+                              :placeholder="checkFutureDate" :disabled="this.futureDay"
                               readonly></el-input>
                   </el-form-item>
                   <el-form-item label="出勤状態">
@@ -171,7 +171,10 @@ export default {
         working_details: '',
         create_date: '',
         create_user_id: '',
-        flow_status_id: ''
+        update_date:'',
+        update_user_id:'',
+        flow_status_id: '',
+        rec_del_flg:''
       },
       pickerOptions: {
         disabledDate(time) {
@@ -217,14 +220,18 @@ export default {
         this.form.record_id = this.employee_info.employee_id + (this.form.attendance_date).replace(/-/g, '') + ((this.tempId < 10) ? ("0" + this.tempId) : this.tempId);
         this.tempId++;
         this.form.create_user_id = this.employee_info.employee_id;
+        this.form.update_user_id = this.employee_info.employee_id;
         this.form.create_date = new Date();
+        this.form.update_date = new Date();
+        this.form.rec_del_flg = 0;
+        this.form.flow_status_id = 0;
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.$axios.post("http://localhost:8090/attendances", this.form).then((res) => {
               if (res.data.flag) {
                 this.$message.success("登録完了しました");
                 this.$router.push({
-                  name: 'Details',
+                  name: 'home',
                   params: {
                     employee_id: this.employee_info.employee_id,
                   }
@@ -273,7 +280,7 @@ export default {
       }
       this.form.working_hours = workingHours;
       (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - workingHours)) > 0 ? (this.form.overtime_hours = Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - workingHours)) : (this.form.overtime_hours = 0);
-      (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - this.form.overtime_hours)) > 0 ? (this.form.working_hours = (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours))>8?8:Math.floor(this.timeCalculation.differentTime - restHours - absenceHours)) : (this.form.working_hours = 0);
+      (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours - this.form.overtime_hours)) > 0 ? (this.form.working_hours = (Math.floor(this.timeCalculation.differentTime - restHours - absenceHours)) > 8 ? 8 : Math.floor(this.timeCalculation.differentTime - restHours - absenceHours)) : (this.form.working_hours = 0);
 
     },
     resetform() {
@@ -298,6 +305,11 @@ export default {
       } else if (iDate.getTime() - nowDate.getTime() <= 0) {
         this.futureDay = false;
       }
+    },
+  },
+  computed: {
+    checkFutureDate() {
+      return this.futureDay ? '0' : '計算中...';
     },
   }
 }
